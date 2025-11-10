@@ -1,5 +1,164 @@
 # Changelog
 
+## 2.0.36
+
+- Fixed: DISABLE_AUTOUPDATER environment variable now properly disables package manager update notifications
+- Fixed queued messages being incorrectly executed as bash commands
+- Fixed input being lost when typing while a queued message is processed
+
+## 2.0.35
+
+- Improve fuzzy search results when searching commands
+- Improved VS Code extension to respect `chat.fontSize` and `chat.fontFamily` settings throughout the entire UI, and apply font changes immediately without requiring reload
+- Added `CLAUDE_CODE_EXIT_AFTER_STOP_DELAY` environment variable to automatically exit SDK mode after a specified idle duration, useful for automated workflows and scripts
+- Migrated `ignorePatterns` from project config to deny permissions in the localSettings.
+- Fixed messages returning null `stop_reason` and `stop_sequence` values
+- Fixed menu navigation getting stuck on items with empty string or other falsy values (e.g., in the `/hooks` menu)
+
+## 2.0.34
+
+- VSCode Extension: Added setting to configure the initial permission mode for new conversations
+- Improved file path suggestion performance with native Rust-based fuzzy finder
+- Fixed infinite token refresh loop that caused MCP servers with OAuth (e.g., Slack) to hang during connection
+- Fixed memory crash when reading or writing large files (especially base64-encoded images)
+
+## 2.0.33
+
+- Native binary installs now launch quicker.
+- Fixed `claude doctor` incorrectly detecting Homebrew vs npm-global installations by properly resolving symlinks
+- Fixed `claude mcp serve` exposing tools with incompatible outputSchemas
+
+## 2.0.32
+
+- Un-deprecate output styles based on community feedback
+- Added `companyAnnouncements` setting for displaying announcements on startup
+- Fixed hook progress messages not updating correctly during PostToolUse hook execution
+
+## 2.0.31
+
+- Windows: native installation uses shift+tab as shortcut for mode switching, instead of alt+m
+- Vertex: add support for Web Search on supported models
+- VSCode: Adding the respectGitIgnore configuration to include .gitignored files in file searches (defaults to true)
+- Fixed a bug with subagents and MCP servers related to "Tool names must be unique" error
+- Fixed issue causing `/compact` to fail with `prompt_too_long` by making it respect existing compact boundaries
+- Fixed plugin uninstall not removing plugins
+
+## 2.0.30
+
+- Added helpful hint to run `security unlock-keychain` when encountering API key errors on macOS with locked keychain
+- Added `allowUnsandboxedCommands` sandbox setting to disable the dangerouslyDisableSandbox escape hatch at policy level
+- Added `disallowedTools` field to custom agent definitions for explicit tool blocking
+- Added prompt-based stop hooks
+- VSCode: Added respectGitIgnore configuration to include .gitignored files in file searches (defaults to true)
+- Enabled SSE MCP servers on native build
+- Deprecated output styles. Review options in `/output-style` and use --system-prompt-file, --system-prompt, --append-system-prompt, CLAUDE.md, or plugins instead
+- Removed support for custom ripgrep configuration, resolving an issue where Search returns no results and config discovery fails
+- Fixed Explore agent creating unwanted .md investigation files during codebase exploration
+- Fixed a bug where `/context` would sometimes fail with "max_tokens must be greater than thinking.budget_tokens" error message
+- Fixed `--mcp-config` flag to correctly override file-based MCP configurations
+- Fixed bug that saved session permissions to local settings
+- Fixed MCP tools not being available to sub-agents
+- Fixed hooks and plugins not executing when using --dangerously-skip-permissions flag
+- Fixed delay when navigating through typeahead suggestions with arrow keys
+- VSCode: Restored selection indicator in input footer showing current file or code selection status
+
+## 2.0.28
+
+- Plan mode: introduced new Plan subagent
+- Subagents: claude can now choose to resume subagents
+- Subagents: claude can dynamically choose the model used by its subagents
+- SDK: added --max-budget-usd flag
+- Discovery of custom slash commands, subagents, and output styles no longer respects .gitignore
+- Stop `/terminal-setup` from adding backslash to `Shift + Enter` in VS Code
+- Add branch and tag support for git-based plugins and marketplaces using fragment syntax (e.g., `owner/repo#branch`)
+- Fixed a bug where macOS permission prompts would show up upon initial launch when launching from home directory
+- Various other bug fixes
+
+## 2.0.27
+
+- New UI for permission prompts
+- Added current branch filtering and search to session resume screen for easier navigation
+- Fixed directory @-mention causing "No assistant message found" error
+- VSCode Extension: Add config setting to include .gitignored files in file searches
+- VSCode Extension: Bug fixes for unrelated 'Warmup' conversations, and configuration/settings occasionally being reset to defaults
+
+## 2.0.25
+
+- Removed legacy SDK entrypoint. Please migrate to @anthropic-ai/claude-agent-sdk for future SDK updates: https://docs.claude.com/en/docs/claude-code/sdk/migration-guide
+
+## 2.0.24
+
+- Fixed a bug where project-level skills were not loading when --setting-sources 'project' was specified
+- Claude Code Web: Support for Web -> CLI teleport
+- Sandbox: Releasing a sandbox mode for the BashTool on Linux & Mac
+- Bedrock: Display awsAuthRefresh output when auth is required
+
+## 2.0.22
+
+- Fixed content layout shift when scrolling through slash commands
+- IDE: Add toggle to enable/disable thinking.
+- Fix bug causing duplicate permission prompts with parallel tool calls
+- Add support for enterprise managed MCP allowlist and denylist
+
+## 2.0.21
+
+- Support MCP `structuredContent` field in tool responses
+- Added an interactive question tool
+- Claude will now ask you questions more often in plan mode
+- Added Haiku 4.5 as a model option for Pro users
+- Fixed an issue where queued commands don't have access to previous messages' output
+
+## 2.0.20
+
+- Added support for Claude Skills
+
+## 2.0.19
+
+- Auto-background long-running bash commands instead of killing them. Customize with BASH_DEFAULT_TIMEOUT_MS
+- Fixed a bug where Haiku was unnecessarily called in print mode
+
+## 2.0.17
+
+- Added Haiku 4.5 to model selector!
+- Haiku 4.5 automatically uses Sonnet in plan mode, and Haiku for execution (i.e. SonnetPlan by default)
+- 3P (Bedrock and Vertex) are not automatically upgraded yet. Manual upgrading can be done through setting `ANTHROPIC_DEFAULT_HAIKU_MODEL`
+- Introducing the Explore subagent. Powered by Haiku it'll search through your codebase efficiently to save context!
+- OTEL: support HTTP_PROXY and HTTPS_PROXY
+- `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` now disables release notes fetching
+
+## 2.0.15
+
+- Fixed bug with resuming where previously created files needed to be read again before writing
+- Fixed bug with `-p` mode where @-mentioned files needed to be read again before writing
+
+## 2.0.14
+
+- Fix @-mentioning MCP servers to toggle them on/off
+- Improve permission checks for bash with inline env vars
+- Fix ultrathink + thinking toggle
+- Reduce unnecessary logins
+- Document --system-prompt
+- Several improvements to rendering
+- Plugins UI polish
+
+## 2.0.13
+
+- Fixed `/plugin` not working on native build
+
+## 2.0.12
+
+- **Plugin System Released**: Extend Claude Code with custom commands, agents, hooks, and MCP servers from marketplaces
+- `/plugin install`, `/plugin enable/disable`, `/plugin marketplace` commands for plugin management
+- Repository-level plugin configuration via `extraKnownMarketplaces` for team collaboration
+- `/plugin validate` command for validating plugin structure and configuration
+- Plugin announcement blog post at https://www.anthropic.com/news/claude-code-plugins
+- Plugin documentation available at https://docs.claude.com/en/docs/claude-code/plugins
+- Comprehensive error messages and diagnostics via `/doctor` command
+- Avoid flickering in `/model` selector
+- Improvements to `/help`
+- Avoid mentioning hooks in `/resume` summaries
+- Changes to the "verbose" setting in `/config` now persist across sessions
+
 ## 2.0.11
 
 - Reduced system prompt size by 1.4k tokens
